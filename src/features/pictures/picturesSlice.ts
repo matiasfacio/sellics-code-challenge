@@ -19,9 +19,6 @@ const picturesSlice = createSlice({
   name: "pictures",
   initialState,
   reducers: {
-    hydrate(state, action: PayloadAction<InitialState>) {
-      state = action.payload;
-    },
     addSelectedPicture(state, action: PayloadAction<SelectedPicture>) {
       state.selectedPictures = [...state.selectedPictures, action.payload];
     },

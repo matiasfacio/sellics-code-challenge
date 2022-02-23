@@ -8,15 +8,10 @@ import ClearIcon from "@material-ui/icons/Clear";
 import AddIcon from "@material-ui/icons/Add";
 
 export const PictureSelector = () => {
-  const [nextPicture, fetchNextPicture, errorFetching, resetError] =
-    usePictureFetch();
+  const [nextPicture, fetchNextPicture, errorFetching] = usePictureFetch();
   const [error, setError] = React.useState(null);
-  const selectedPictures = useAppSelector(
-    (state) => state.pictures.selectedPictures
-  );
-  const rejectedPictures = useAppSelector(
-    (state) => state.pictures.rejectedPictures
-  );
+  const selectedPictures = useAppSelector((state) => state.selectedPictures);
+  const rejectedPictures = useAppSelector((state) => state.rejectedPictures);
 
   React.useEffect(() => {
     if (rejectedPictures.includes(nextPicture)) {
@@ -31,7 +26,7 @@ export const PictureSelector = () => {
     dispatch(PicturesSliceAction.addRejectedPicture(rejectedPic));
 
   const handleClick = (pic) => {
-    if (selectedPictures.includes(pic)) {
+    if (selectedPictures?.includes(pic)) {
       setError("You have already stored this picture.");
       setTimeout(() => {
         setError(null);
@@ -52,13 +47,10 @@ export const PictureSelector = () => {
     <PictureSelectorContainer>
       {error && <Error>{error}</Error>}
       {errorFetching && <Error>{errorFetching}</Error>}
-      <CarrousselContainer>
-        <h2>Approved Images ({selectedPictures.length})</h2>
-        <CarrusselComp
-          pictures={selectedPictures}
-          onClick={() => fetchNextPicture()}
-        />
-      </CarrousselContainer>
+      <CarrusselComp
+        pictures={selectedPictures}
+        onClick={() => fetchNextPicture()}
+      />
       <Divisor />
       {nextPicture ? (
         <StyledPictureContainer>
@@ -104,7 +96,8 @@ const ButtonsGroup = ({ onOk, onCancel, pic }) => {
 
 const CarrusselComp = ({ pictures, onClick }) => {
   return (
-    <>
+    <CarrousselContainer>
+      <h2>Approved Images ({pictures?.length})</h2>
       <Carroussel>
         {!pictures.length ? (
           <EmptyCarrouselPic onClick={onClick}>
@@ -118,7 +111,7 @@ const CarrusselComp = ({ pictures, onClick }) => {
           </>
         )}
       </Carroussel>
-    </>
+    </CarrousselContainer>
   );
 };
 

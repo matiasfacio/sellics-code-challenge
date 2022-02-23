@@ -69,7 +69,7 @@ export const PictureSelector = () => {
           />
         </StyledPictureContainer>
       ) : (
-        <EmptyPicture onClick={() => fetchNextPicture()}>
+        <EmptyPicture onClick={() => fetchNextPicture()} data-testid="load">
           <AddIcon fontSize="large" />
         </EmptyPicture>
       )}
@@ -91,10 +91,20 @@ export const PictureSelector = () => {
 const ButtonsGroup = ({ onOk, onCancel, pic }) => {
   return (
     <ButtonGroup>
-      <Button disabled={!pic} color="red" onClick={onCancel}>
+      <Button
+        disabled={!pic}
+        color="red"
+        onClick={onCancel}
+        data-testid="reject"
+      >
         <ClearIcon />
       </Button>
-      <Button disabled={!pic} color="green" onClick={onOk}>
+      <Button
+        disabled={!pic}
+        color="green"
+        onClick={onOk}
+        data-testid={"select"}
+      >
         <CheckIcon />
       </Button>
     </ButtonGroup>
@@ -104,7 +114,9 @@ const ButtonsGroup = ({ onOk, onCancel, pic }) => {
 const CarrusselComp = ({ pictures, onClick, unCheck }) => {
   return (
     <CarrousselContainer>
-      <h2>Approved Images ({pictures?.length})</h2>
+      <h2 data-testid="pictures-length">
+        Approved Images ({pictures?.length})
+      </h2>
       <Carroussel>
         {!pictures.length ? (
           <EmptyCarrouselPic onClick={onClick}>
@@ -232,7 +244,7 @@ const CarrousselImage = styled.div`
   }
 `;
 
-const EmptyCarrouselPic = styled.div`
+const EmptyCarrouselPic = styled.button`
   height: 60px;
   flex-basis: 20%;
   background-color: lightblue;

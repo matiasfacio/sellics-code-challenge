@@ -125,13 +125,13 @@ const ButtonsGroup: VFC<ButtonsGroupProps> = ({ onOk, onCancel, pic }) => {
   );
 };
 
-interface CarrousselComp {
+interface CarrousselCompProps {
   pictures: SelectedPictures;
   onClick: () => void;
   unCheck: (value: SelectedPicture) => void;
 }
 
-const CarrousselComp: VFC<CarrousselComp> = ({
+const CarrousselComp: VFC<CarrousselCompProps> = ({
   pictures,
   onClick,
   unCheck,

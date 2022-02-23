@@ -20,9 +20,9 @@ export const usePictureFetch = () => {
     }
   };
 
-  const fetchNextPicture = async () => {
+  const fetchNextPicture = (): void => {
     fetchData();
   };
 
-  return [nextPicture, fetchNextPicture, errorFetching];
+  return { nextPicture, fetchNextPicture, errorFetching };
 };

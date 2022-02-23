@@ -1,5 +1,11 @@
-import React from "react";
-import { PicturesSliceAction } from "../features/pictures/picturesSlice";
+import React, { VFC } from "react";
+import {
+  PicturesSliceAction,
+  Picture as PictureType,
+  SelectedPicture,
+  RejectedPicture,
+  SelectedPictures,
+} from "../features/pictures/picturesSlice";
 import { useAppSelector, useAppDispatch } from "../app/hooks";
 import { usePictureFetch } from "../utils/usePictureFetch";
 import styled, { css } from "styled-components";
@@ -8,26 +14,28 @@ import ClearIcon from "@material-ui/icons/Clear";
 import AddIcon from "@material-ui/icons/Add";
 
 export const PictureSelector = () => {
-  const [nextPicture, fetchNextPicture, errorFetching] = usePictureFetch();
-  const [error, setError] = React.useState(null);
+  const { nextPicture, fetchNextPicture, errorFetching } = usePictureFetch();
+  const [error, setError] = React.useState<string | null>(null);
   const selectedPictures = useAppSelector((state) => state.selectedPictures);
   const rejectedPictures = useAppSelector((state) => state.rejectedPictures);
 
   React.useEffect(() => {
-    if (rejectedPictures.includes(nextPicture)) {
-      fetchNextPicture();
+    if (nextPicture !== null) {
+      if (rejectedPictures.includes(nextPicture)) {
+        fetchNextPicture();
+      }
     }
   }, [nextPicture, fetchNextPicture, rejectedPictures]);
 
   const dispatch = useAppDispatch();
-  const addNewSelectedPictureToStore = (selectedPic) =>
+  const addNewSelectedPictureToStore = (selectedPic: SelectedPicture) =>
     dispatch(PicturesSliceAction.addSelectedPicture(selectedPic));
-  const addRejectedPicture = (rejectedPic) =>
+  const addRejectedPicture = (rejectedPic: RejectedPicture) =>
     dispatch(PicturesSliceAction.addRejectedPicture(rejectedPic));
-  const removeSelectedPicture = (selectedPic) =>
+  const removeSelectedPicture = (selectedPic: SelectedPicture) =>
     dispatch(PicturesSliceAction.removeSelectedPicture(selectedPic));
 
-  const handleClick = (pic) => {
+  const handleClick = (pic: PictureType) => {
     if (selectedPictures?.includes(pic)) {
       setError("You have already stored this picture.");
       setTimeout(() => {
@@ -40,12 +48,12 @@ export const PictureSelector = () => {
     }
   };
 
-  const handleRejectAndNext = (rejectedPic) => {
+  const handleRejectAndNext = (rejectedPic: RejectedPicture) => {
     addRejectedPicture(rejectedPic);
     fetchNextPicture();
   };
 
-  const handleUnselect = (pic) => {
+  const handleUnselect = (pic: SelectedPicture) => {
     removeSelectedPicture(pic);
   };
 
@@ -53,10 +61,10 @@ export const PictureSelector = () => {
     <PictureSelectorContainer>
       {error && <Error>{error}</Error>}
       {errorFetching && <Error>{errorFetching}</Error>}
-      <CarrusselComp
+      <CarrousselComp
         pictures={selectedPictures}
         onClick={() => fetchNextPicture()}
-        unCheck={(pic) => handleUnselect(pic)}
+        unCheck={(pic: SelectedPicture) => handleUnselect(pic)}
       />
       <Divisor />
       {nextPicture ? (
@@ -88,7 +96,13 @@ export const PictureSelector = () => {
   );
 };
 
-const ButtonsGroup = ({ onOk, onCancel, pic }) => {
+interface ButtonsGroupProps {
+  onOk: () => void;
+  onCancel: () => void;
+  pic: PictureType;
+}
+
+const ButtonsGroup: VFC<ButtonsGroupProps> = ({ onOk, onCancel, pic }) => {
   return (
     <ButtonGroup>
       <Button
@@ -111,7 +125,17 @@ const ButtonsGroup = ({ onOk, onCancel, pic }) => {
   );
 };
 
-const CarrusselComp = ({ pictures, onClick, unCheck }) => {
+interface CarrousselComp {
+  pictures: SelectedPictures;
+  onClick: () => void;
+  unCheck: (value: SelectedPicture) => void;
+}
+
+const CarrousselComp: VFC<CarrousselComp> = ({
+  pictures,
+  onClick,
+  unCheck,
+}) => {
   return (
     <CarrousselContainer>
       <h2 data-testid="pictures-length">
@@ -124,7 +148,7 @@ const CarrusselComp = ({ pictures, onClick, unCheck }) => {
           </EmptyCarrouselPic>
         ) : (
           <>
-            {pictures.map((pic) => {
+            {pictures.map((pic: SelectedPicture) => {
               return (
                 <CarrousselImage key={pic} url={pic}>
                   <CheckIcon className="icon" onClick={() => unCheck(pic)} />
@@ -158,7 +182,7 @@ const ClickMoreText = styled.p`
   color: #292929;
 `;
 
-const Button = styled.button`
+const Button = styled.button<{ color: string }>`
   color: white;
   border: none;
   cursor: pointer;
@@ -175,7 +199,7 @@ const Button = styled.button`
   }
 `;
 
-const Picture = styled.div`
+const Picture = styled.div<{ url: PictureType }>`
   height: 300px;
   width: 300px;
   ${({ url }) => css`
@@ -218,7 +242,7 @@ const Carroussel = styled.div`
   justify-content: flex-start;
 `;
 
-const CarrousselImage = styled.div`
+const CarrousselImage = styled.div<{ url: SelectedPicture }>`
   height: 60px;
   flex-basis: 25%;
   overflow: hidden;

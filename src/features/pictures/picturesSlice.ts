@@ -2,6 +2,10 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type SelectedPicture = string;
 export type RejectedPicture = string;
+export interface Picture {
+  id: string;
+  urls: string[];
+}
 export type SelectedPictures = SelectedPicture[];
 export type RejectedPictures = RejectedPicture[];
 
@@ -24,6 +28,12 @@ const picturesSlice = createSlice({
     },
     addRejectedPicture(state, action: PayloadAction<RejectedPicture>) {
       state.rejectedPictures = [...state.rejectedPictures, action.payload];
+    },
+    removeSelectedPicture(state, action: PayloadAction<SelectedPicture>) {
+      const filterPic = state.selectedPictures.filter(
+        (pic) => pic !== action.payload
+      );
+      state.selectedPictures = filterPic;
     },
   },
 });

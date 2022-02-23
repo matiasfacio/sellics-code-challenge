@@ -1,7 +1,8 @@
 import React from "react";
+import { Picture } from "../features/pictures/picturesSlice";
 
 export const usePictureFetch = () => {
-  const [nextPicture, setNextPicture] = React.useState(null);
+  const [nextPicture, setNextPicture] = React.useState<Picture | null>(null);
   const [errorFetching, setErrorFetching] = React.useState<string | null>(null);
 
   const fetchData = async () => {
@@ -15,7 +16,7 @@ export const usePictureFetch = () => {
       }, 3000);
     } else {
       const data = await result.json();
-      setNextPicture(data);
+      setNextPicture({ id: data.id, urls: data.urls });
     }
   };
 
@@ -23,9 +24,5 @@ export const usePictureFetch = () => {
     fetchData();
   };
 
-  const resetError = () => {
-    setErrorFetching(null);
-  };
-
-  return [nextPicture, fetchNextPicture, errorFetching, resetError];
+  return [nextPicture, fetchNextPicture, errorFetching];
 };

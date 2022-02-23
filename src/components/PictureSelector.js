@@ -24,6 +24,8 @@ export const PictureSelector = () => {
     dispatch(PicturesSliceAction.addSelectedPicture(selectedPic));
   const addRejectedPicture = (rejectedPic) =>
     dispatch(PicturesSliceAction.addRejectedPicture(rejectedPic));
+  const removeSelectedPicture = (selectedPic) =>
+    dispatch(PicturesSliceAction.removeSelectedPicture(selectedPic));
 
   const handleClick = (pic) => {
     if (selectedPictures?.includes(pic)) {
@@ -43,6 +45,10 @@ export const PictureSelector = () => {
     fetchNextPicture();
   };
 
+  const handleUnselect = (pic) => {
+    removeSelectedPicture(pic);
+  };
+
   return (
     <PictureSelectorContainer>
       {error && <Error>{error}</Error>}
@@ -50,6 +56,7 @@ export const PictureSelector = () => {
       <CarrusselComp
         pictures={selectedPictures}
         onClick={() => fetchNextPicture()}
+        unCheck={(pic) => handleUnselect(pic)}
       />
       <Divisor />
       {nextPicture ? (
@@ -94,7 +101,7 @@ const ButtonsGroup = ({ onOk, onCancel, pic }) => {
   );
 };
 
-const CarrusselComp = ({ pictures, onClick }) => {
+const CarrusselComp = ({ pictures, onClick, unCheck }) => {
   return (
     <CarrousselContainer>
       <h2>Approved Images ({pictures?.length})</h2>
@@ -106,7 +113,11 @@ const CarrusselComp = ({ pictures, onClick }) => {
         ) : (
           <>
             {pictures.map((pic) => {
-              return <CarrousselImage key={pic} url={pic} />;
+              return (
+                <CarrousselImage key={pic} url={pic}>
+                  <CheckIcon className="icon" onClick={() => unCheck(pic)} />
+                </CarrousselImage>
+              );
             })}
           </>
         )}
@@ -202,10 +213,23 @@ const CarrousselImage = styled.div`
   flex-shrink: 0;
   flex-grow: 0;
   background-color: lightblue;
+  position: relative;
   ${({ url }) => css`
     background-image: url(${url});
     background-size: cover;
   `}
+  .icon {
+    position: absolute;
+    content: "";
+    top: 5px;
+    right: 5px;
+    height: 20px;
+    width: 20px;
+    background-color: green;
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+  }
 `;
 
 const EmptyCarrouselPic = styled.div`

@@ -62,9 +62,9 @@ export const PictureSelector = () => {
       {nextPicture ? (
         <StyledPictureContainer>
           <Picture
-            url={nextPicture.urls.regular}
+            url={nextPicture}
             onClick={() => {
-              handleClick(nextPicture.id);
+              handleClick(nextPicture);
             }}
           />
         </StyledPictureContainer>
@@ -80,8 +80,8 @@ export const PictureSelector = () => {
       ) : (
         <ButtonsGroup
           pic={nextPicture}
-          onOk={() => handleClick(nextPicture.urls.regular)}
-          onCancel={() => handleRejectAndNext(nextPicture.urls.regular)}
+          onOk={() => handleClick(nextPicture)}
+          onCancel={() => handleRejectAndNext(nextPicture)}
         />
       )}
     </PictureSelectorContainer>

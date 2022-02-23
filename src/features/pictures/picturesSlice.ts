@@ -2,10 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export type SelectedPicture = string;
 export type RejectedPicture = string;
-export interface Picture {
-  id: string;
-  urls: string[];
-}
+export type Picture = string;
 export type SelectedPictures = SelectedPicture[];
 export type RejectedPictures = RejectedPicture[];
 

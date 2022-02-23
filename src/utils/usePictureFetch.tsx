@@ -16,7 +16,7 @@ export const usePictureFetch = () => {
       }, 3000);
     } else {
       const data = await result.json();
-      setNextPicture({ id: data.id, urls: data.urls });
+      setNextPicture(data.urls.regular);
     }
   };
 

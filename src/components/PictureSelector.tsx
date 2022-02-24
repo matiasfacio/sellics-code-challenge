@@ -68,13 +68,12 @@ export const PictureSelector = () => {
       />
       <Divisor />
       {nextPicture ? (
-        <StyledPictureContainer>
-          <Picture
-            url={nextPicture}
-            onClick={() => {
-              handleClick(nextPicture);
-            }}
-          />
+        <StyledPictureContainer
+          onClick={() => {
+            handleClick(nextPicture);
+          }}
+        >
+          <img src={nextPicture} alt="next" />
         </StyledPictureContainer>
       ) : (
         <EmptyPicture onClick={() => fetchNextPicture()} data-testid="load">
@@ -173,8 +172,9 @@ const PictureSelectorContainer = styled.div`
 const StyledPictureContainer = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 300px;
   gap: 50px;
+  width: 300px;
+  object-fit: contain;
 `;
 
 const ClickMoreText = styled.p`
@@ -197,16 +197,6 @@ const Button = styled.button<{ color: string }>`
     background-color: gray;
     cursor: not-allowed;
   }
-`;
-
-const Picture = styled.div<{ url: PictureType }>`
-  height: 300px;
-  width: 300px;
-  ${({ url }) => css`
-    background-image: url(${url});
-    background-size: cover;
-    background-repeat: no-repeat;
-  `}
 `;
 
 const EmptyPicture = styled.div`
@@ -251,8 +241,11 @@ const CarrousselImage = styled.div<{ url: SelectedPicture }>`
   background-color: lightblue;
   position: relative;
   ${({ url }) => css`
+    background-color: black;
     background-image: url(${url});
-    background-size: cover;
+    background-size: 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
   `}
   .icon {
     position: absolute;

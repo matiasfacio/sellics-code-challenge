@@ -1,7 +1,7 @@
 import React, { VFC } from "react";
 import {
   PicturesSliceAction,
-  Picture as PictureType,
+  Picture,
   SelectedPicture,
   RejectedPicture,
   SelectedPictures,
@@ -35,7 +35,7 @@ export const PictureSelector = () => {
   const removeSelectedPicture = (selectedPic: SelectedPicture) =>
     dispatch(PicturesSliceAction.removeSelectedPicture(selectedPic));
 
-  const handleClick = (pic: PictureType) => {
+  const handleClick = (pic: Picture) => {
     if (selectedPictures?.includes(pic)) {
       setError("You have already stored this picture.");
       setTimeout(() => {
@@ -82,7 +82,7 @@ export const PictureSelector = () => {
 };
 
 interface WithNextPictureProps {
-  nextPicture: PictureType;
+  nextPicture: Picture;
   onClick: () => void;
   onReject: () => void;
 }
@@ -118,7 +118,7 @@ const WithoutNextPicture = ({ onClick }: { onClick: () => void }) => {
 interface ButtonsGroupProps {
   onOk: () => void;
   onCancel: () => void;
-  pic: PictureType;
+  pic: Picture;
 }
 
 const ButtonsGroup: VFC<ButtonsGroupProps> = ({ onOk, onCancel, pic }) => {

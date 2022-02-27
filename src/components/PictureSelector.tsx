@@ -68,28 +68,29 @@ export const PictureSelector = () => {
       />
       <Divisor />
       {nextPicture ? (
-        <StyledPictureContainer
-          onClick={() => {
-            handleClick(nextPicture);
-          }}
-        >
-          <img src={nextPicture} alt="next" />
-        </StyledPictureContainer>
+        <>
+          <StyledPictureContainer
+            onClick={() => {
+              handleClick(nextPicture);
+            }}
+          >
+            <img src={nextPicture} alt="next" />
+          </StyledPictureContainer>
+          <ButtonsGroup
+            pic={nextPicture}
+            onOk={() => handleClick(nextPicture)}
+            onCancel={() => handleRejectAndNext(nextPicture)}
+          />
+        </>
       ) : (
-        <EmptyPicture onClick={() => fetchNextPicture()} data-testid="load">
-          <AddIcon fontSize="large" />
-        </EmptyPicture>
-      )}
-      {!nextPicture ? (
-        <ClickMoreText>
-          Click on '+' in order to get image recommendations
-        </ClickMoreText>
-      ) : (
-        <ButtonsGroup
-          pic={nextPicture}
-          onOk={() => handleClick(nextPicture)}
-          onCancel={() => handleRejectAndNext(nextPicture)}
-        />
+        <>
+          <EmptyPicture onClick={() => fetchNextPicture()} data-testid="load">
+            <AddIcon fontSize="large" />
+          </EmptyPicture>
+          <ClickMoreText>
+            Click on '+' in order to get image recommendations
+          </ClickMoreText>
+        </>
       )}
     </PictureSelectorContainer>
   );

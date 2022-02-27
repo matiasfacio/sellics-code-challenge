@@ -67,32 +67,51 @@ export const PictureSelector = () => {
         unCheck={(pic: SelectedPicture) => handleUnselect(pic)}
       />
       <Divisor />
-      {nextPicture ? (
-        <>
-          <StyledPictureContainer
-            onClick={() => {
-              handleClick(nextPicture);
-            }}
-          >
-            <img src={nextPicture} alt="next" />
-          </StyledPictureContainer>
-          <ButtonsGroup
-            pic={nextPicture}
-            onOk={() => handleClick(nextPicture)}
-            onCancel={() => handleRejectAndNext(nextPicture)}
-          />
-        </>
-      ) : (
-        <>
-          <EmptyPicture onClick={() => fetchNextPicture()} data-testid="load">
-            <AddIcon fontSize="large" />
-          </EmptyPicture>
-          <ClickMoreText>
-            Click on '+' in order to get image recommendations
-          </ClickMoreText>
-        </>
+      {nextPicture && (
+        <WithNextPicture
+          nextPicture={nextPicture}
+          onClick={() => handleClick(nextPicture)}
+          onReject={() => handleRejectAndNext(nextPicture)}
+        />
+      )}
+      {!nextPicture && (
+        <WithoutNextPicture onClick={() => fetchNextPicture()} />
       )}
     </PictureSelectorContainer>
+  );
+};
+
+interface WithNextPictureProps {
+  nextPicture: PictureType;
+  onClick: () => void;
+  onReject: () => void;
+}
+
+const WithNextPicture: VFC<WithNextPictureProps> = ({
+  nextPicture,
+  onClick,
+  onReject,
+}) => {
+  return (
+    <>
+      <StyledPictureContainer onClick={onClick}>
+        <img src={nextPicture} alt="next" />
+      </StyledPictureContainer>
+      <ButtonsGroup pic={nextPicture} onOk={onClick} onCancel={onReject} />
+    </>
+  );
+};
+
+const WithoutNextPicture = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <>
+      <EmptyPicture onClick={onClick} data-testid="load">
+        <AddIcon fontSize="large" />
+      </EmptyPicture>
+      <ClickMoreText>
+        Click on '+' in order to get image recommendations
+      </ClickMoreText>
+    </>
   );
 };
 

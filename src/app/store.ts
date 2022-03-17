@@ -2,7 +2,6 @@ import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import { picturesSliceReducer } from "../features/pictures/picturesSlice";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import thunk from "redux-thunk";
 
 const persistConfig = {
   key: "pictures",
@@ -13,7 +12,10 @@ const persistedReducer = persistReducer(persistConfig, picturesSliceReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: [thunk],
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 
 export const persistor = persistStore(store);
